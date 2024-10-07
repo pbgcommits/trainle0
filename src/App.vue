@@ -369,12 +369,13 @@ export default {
       return !this.win && !this.fail;
     },
     daysSinceStart() {
-      const midnightOfToday = new Date();
-      midnightOfToday.setHours(0, 0, 0, 0);
+      // 6am rather than midnight to solve issues with daylight savings
+      const sixAmOfToday = new Date();
+      sixAmOfToday.setHours(6, 0, 0, 0);
       const midnightOfStart = new Date("2023-09-19");
       midnightOfStart.setHours(0, 0, 0, 0);
 
-      const diff = midnightOfToday.getTime() - midnightOfStart.getTime();
+      const diff = sixAmOfToday.getTime() - midnightOfStart.getTime();
       return Math.floor(diff / (1000 * 60 * 60 * 24)) + 1;
     },
     shareText() {

@@ -212,7 +212,7 @@ export default {
           guesses: this.guesses.map((g) => g.station),
         },
       });
-      showConfetti();
+      showConfetti({ extraCelebration: this.isSpecialGameNumber() });
     },
 
     getGameNumber() {
@@ -402,8 +402,13 @@ export default {
   watch: {},
 };
 
-function showConfetti() {
-  var defaults = {
+/**
+ * Shower the screen in confetti.
+ *
+ * @param {boolean} [opts.extraCelebration=false] Add extra party emojis to the confetti.
+ */
+function showConfetti({ extraCelebration = false } = {}) {
+  const defaults = {
     spread: 360,
     ticks: 100,
     gravity: 0.5,
@@ -421,6 +426,10 @@ function showConfetti() {
     useWorker: true,
   };
 
+  const hundredEmoji = confetti.shapeFromText({ text: "💯" });
+  const partyPopperEmoji = confetti.shapeFromText({ text: "🎉" });
+  const partyFaceEmoji = confetti.shapeFromText({ text: "🥳" });
+
   function shoot({ ...options } = {}) {
     confetti({
       ...defaults,
@@ -437,12 +446,28 @@ function showConfetti() {
       scalar: 0.75,
       shapes: ["circle"],
     });
+
+    if (extraCelebration) {
+      confetti({
+        ...defaults,
+        ...options,
+        particleCount: 50,
+        scalar: 2,
+        flat: true,
+        shapes: [hundredEmoji, partyFaceEmoji, partyPopperEmoji],
+      });
+    }
   }
 
   setTimeout(shoot, 0);
   setTimeout(shoot, 200);
   setTimeout(shoot, 400, { startVelocity: 20 });
   setTimeout(shoot, 600, { startVelocity: 30 });
+  if (extraCelebration) {
+    setTimeout(shoot, 800, { startVelocity: 20 });
+    setTimeout(shoot, 1100, { startVelocity: 20 });
+    setTimeout(shoot, 1400, { startVelocity: 20 });
+  }
 }
 
 window.track = ({ id, parameters }) => {

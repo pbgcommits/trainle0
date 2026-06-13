@@ -219,7 +219,7 @@ export default {
       if (window.location.search.match(/game=\d+/)) {
         const gameNumber = +window.location.search.match(/game=(\d+)/)[1];
         console.log(gameNumber);
-        if (gameNumber <= this.daysSinceStart || gameNumber > 1000) {
+        if (gameNumber <= this.daysSinceStart) {
           return gameNumber;
         }
       } else if (this.isUnlimited()) {

@@ -11,10 +11,14 @@ v-app
   v-container.px-2.px-sm-4.px-md-6
     //- .pa3.flex.flex-column(style="font-family:sans-serif; height:100vh; ")
     div(style="flex-grow:1")
-      h1.text-h4.text-lg-h2.text-center 🚂 Trainle
-        span(v-if="isUnlimited()")  unlimited
-        span(v-else)  \#{{ gameNumber }}
-        span 🚂
+      h1.text-h4.text-lg-h2.text-center
+        | 🚂 Trainle 
+        span(v-if="isUnlimited()")  Unlimited
+        span(
+          v-else
+          :class="{ specialGameNumber: isSpecialGameNumber() }"
+        ) \#{{ gameNumber }}
+        span  🚂
       v-sheet.my-5
         .text-body-1 Try to guess today's mystery station on Melbourne's metro train network.
         .text-body-1.mt-4 Each guess reveals how many stations to the target, and the distance as the crow flies.
@@ -225,6 +229,9 @@ export default {
     },
     isUnlimited() {
       return !!window.location.search.match(/unlimited/);
+    },
+    isSpecialGameNumber() {
+      return this.getGameNumber() % 1000 === 0;
     },
     testRandom() {
       const stations = {};
@@ -472,6 +479,30 @@ window.track = ({ id, parameters }) => {
 };
 </script>
 <style>
+.specialGameNumber {
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    #ff0000,
+    #ff9900,
+    #ffee00,
+    #33cc33,
+    #3399ff,
+    #9933ff,
+    #ff0000
+  );
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: rainbow-shift 4s linear infinite;
+}
+
+@keyframes rainbow-shift {
+  to {
+    background-position: 200% center;
+  }
+}
 #hintmap .mapbox-ctrl-attrib-inner {
   opacity: 0.01;
 }
